@@ -1,0 +1,14 @@
+runtime: python39
+entrypoint: gunicorn -b :$PORT app:app
+
+instance_class: F2
+
+env_variables:
+  OPENAI_API_KEY: "sk-proj-s9CSS7saMfivJk4fqHCGT3BlbkFJV73xs17NlOZShafjITuQ"
+
+handlers:
+- url: /static
+  static_dir: static
+
+- url: /.*
+  script: auto
