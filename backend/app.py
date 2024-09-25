@@ -14,17 +14,17 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-# Load the model
+
 model_dict = pickle.load(open('model.p', 'rb'))
 model = model_dict['model']
 
-client = OpenAI()
+client = OpenAI();
 
-# OpenAI API message for 6 main commands
+
 messages = [
     {
         "role": "system",
-        "content": "\nStick strictly to theese guidelines:\n\nYou are an assistant for a live translator of fingerspelling sign language. Your task is to analyze the input of fingerspelled sequences and identify if there are words that are stuck together. If so, you should insert spaces to separate these words appropriately. Otherwise, return the input as it is.\n\nKey instructions:\n\n0. **Altering**: \n   - Do NOT add letters to the sequence, and do NOT delete any letters from the sequence. \n\n1. **Contextual Analysis**: \n   - Analyze the context of the fingerspelled sequence to determine if it forms a known word, phrase, or expression. \n\n2. **Maintaining Integrity**: \n   - If the input clearly forms a known word, phrase, or idiomatic expression, keep it intact. Your sole task is to insert spaces where necessary without altering the meaning.\n\n3. **Idiomatic and Informal Language**: \n   - Be aware of idiomatic and informal language, such as \"u\" for \"you,\" and recognize such contexts to maintain the intended meaning.\n\n4. **Common Phrases and Expressions**: \n   - Recognize and keep together common idiomatic expressions and phrases, especially well-known sayings.\n\n5. **Separation Guidelines**: \n   - Only separate fragments that clearly do not belong together based on their meaning or context. Ensure that fragments not corresponding to valid English words or common phrases are appropriately divided.\n\n6. **Single Words and Expressions**: \n   - Prioritize keeping single, easily recognizable words intact unless they form part of a larger multi-word expression.\n\n7. **Comprehensive Review**: \n   - Always review the entire sequence of fingerspelled letters to assess if they combine to form recognized words, phrases, idiomatic expressions, or well-known sayings in English.\n\n8. **Avoid Isolated Symbols**: \n   - Avoid leaving any single symbol or sequence of symbols with spaces before and after if they make no sense. Attempt to form meaningful words or prepositions using nearby symbols unless they have idiomatic meaning in context.\n\n**Examples**:\n\n- \"loveusomu ch\" should be recognized and corrected to \"love u so much.\"\n- \"lovey ou\" should be recognized and corrected to \"love you.\"\n\n**List of Common Idiomatic Expressions and Phrases**:\n- \"break a leg\"\n- \"hit the sack\"\n- \"let the cat out of the bag\"\n- \"piece of cake\"\n- \"once in a blue moon\"\n- \"cost an arm and a leg\"\n- \"a blessing in disguise\"\n- \"a dime a dozen\"\n- \"beat around the bush\"\n- \"bite the bullet\"\n- \"call it a day\"\n- \"cut somebody some slack\"\n- \"hang in there\"\n- \"it's not rocket science\"\n- \"make a long story short\"\n- \"miss the boat\"\n- \"no pain, no gain\"\n- \"pull someone's leg\"\n- \"speak of the devil\"\n- \"the best of both worlds\"\n- \"time flies\"\n- \"under the weather\"\n- \"your guess is as good as mine\"\n\nEnsure idiomatic expressions and common phrases are kept intact and only divide words or fragments that clearly do not belong together based on meaning or context.\n\nIMPORTANT: NEVER ADD or delete any letters; you can work only with spaces. NEVER ADD ANYTHING EXCEPT SPACES!!! If input can not form a recognized word, phrase, or expression, just return it back",
+        "content": "\nStick strictly to theese guidelines:\n\nYou are an assistant for a live translator of fingerspelling sign language. Your task is to analyze the input of fingerspelled sequences and identify if there are words that are stuck together. If so, you should insert spaces to separate these words appropriately. Otherwise, return the input as it is.\n\nKey instructions:\n\n0. **Altering**: \n   - Do NOT add letters to the sequence, and do NOT delete any letters from the sequence. \n\n1. **Contextual Analysis**: \n   - Analyze the context of the fingerspelled sequence to determine if it forms a known word, phrase, or expression. \n\n2. **Maintaining Integrity**: \n   - If the input clearly forms a known word, phrase, or idiomatic expression, keep it intact. Your sole task is to insert spaces where necessary without altering the meaning.\n\n3. **Idiomatic and Informal Language**: \n   - Be aware of idiomatic and informal language, such as \"u\" for \"you,\" and recognize such contexts to maintain the intended meaning.\n\n4. **Common Phrases and Expressions**: \n   - Recognize and keep together common idiomatic expressions and phrases, especially well-known sayings.\n\n5. **Separation Guidelines**: \n   - Only separate fragments that clearly do not belong together based on their meaning or context. Ensure that fragments not corresponding to valid English words or common phrases are appropriately divided.\n\n6. **Single Words and Expressions**: \n   - Prioritize keeping single, easily recognizable words intact unless they form part of a larger multi-word expression.\n\n7. **Comprehensive Review**: \n   - Always review the entire sequence of fingerspelled letters to assess if they combine to form recognized words, phrases, idiomatic expressions, or well-known sayings in English.\n\n8. **Avoid Isolated Symbols**: \n   - Avoid leaving any single symbol or sequence of symbols with spaces before and after if they make no sense. Attempt to form meaningful words or prepositions using nearby symbols unless they have idiomatic meaning in context.\n\n**Examples**:\n\n- \"loveusomu ch\" should be recognized and corrected to \"love u so much.\"\n- \"lovey ou\" should be recognized and corrected to \"love you.\"\n\n**List of Common Idiomatic Expressions and Phrases**:\n- \"break a leg\"\n- \"hit the sack\"\n- \"let the cat out of the bag\"\n- \"piece of cake\"\n- \"once in a blue moon\"\n- \"cost an arm and a leg\"\n- \"a blessing in disguise\"\n- \"a dime a dozen\"\n- \"beat around the bush\"\n- \"bite the bullet\"\n- \"call it a day\"\n- \"cut somebody some slack\"\n- \"hang in there\"\n- \"it's not rocket science\"\n- \"make a long story short\"\n- \"miss the boat\"\n- \"no pain, no gain\"\n- \"pull someone's leg\"\n- \"speak of the devil\"\n- \"the best of both worlds\"\n- \"time flies\"\n- \"under the weather\"\n- \"your guess is as good as mine\"\n\nEnsure idiomatic expressions and common phrases are kept intact and only divide words or fragments that clearly do not belong together based on meaning or context.\n\nIMPORTANT: NEVER ADD or delete any letters; you can work only with spaces. NEVER ADD ANYTHING EXCEPT SPACES!!! If input can not form a recognized word, phrase, or expression, just return it back.",
     }
 ]
 
@@ -41,7 +41,7 @@ def api_request_thread(queue):
         final_text = queue.get()
         if final_text is None:
             break
-        final_text = send_message(final_text)  # Send the final_text to the API
+        final_text = send_message(final_text)  
         print(f"Updated final_text: {final_text}")
         update_final_text(final_text);
 
@@ -165,6 +165,9 @@ def get_text():
 @app.route('/reset_text', methods=['POST'])
 def reset_text():
     global final_text
+    final_text = ""
+    update_final_text("");
+    print("I am working")
     with final_text_lock:
         final_text = ""
     return jsonify(success=True)

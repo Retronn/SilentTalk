@@ -26,6 +26,6 @@ export const siteConfig = {
     },
   ],
   links: {
-    github: "https://github.com/nextui-org/nextui",
+    github: "https://github.com/Retronn/DisabilityHackathon",
   },
 };
