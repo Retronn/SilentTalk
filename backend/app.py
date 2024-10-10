@@ -30,7 +30,7 @@ messages = [
 
 def send_message(message):
     messages.append({"role": "user", "content": message})
-    chat = client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
+    chat = client.chat.completions.create(model="gpt-4o-mini", messages=messages)
     reply = chat.choices[0].message.content
     print(f"Translation: {reply}")
     messages.append({"role": "assistant", "content": reply})

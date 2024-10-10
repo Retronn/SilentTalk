@@ -52,12 +52,12 @@ function CommandDisplay({setIsLightBulbOn,setIsFanOn,setIsLockOn}:any) {
     }, []);
 
     useEffect(()=>{
-        if(translatedText=="lights on"){
+        if(translatedText=="lights on" || translatedText=="lightson"){
             playCommandSuccess('Lights On')
             setIsLightBulbOn(true)
             
         }
-        else if(translatedText=="lights off"){
+        else if(translatedText=="lights off" || translatedText=="lightsoff"){
             playCommandSuccess('Lights Off')
             setIsLightBulbOn(false)
         }
